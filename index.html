@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>X-Hospital Finder</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #e0f7ff, #cceeff);
+      color: #003366;
+    }
+    header {
+      text-align: center;
+      padding: 2rem;
+      background-color: #b3e0ff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background-color: #ffffffcc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .selectors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .selectors select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #99ccff;
+      background-color: #f0faff;
+      flex: 1;
+      min-width: 200px;
+    }
+    .results h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #99ccff;
+      padding-bottom: 0.5rem;
+    }
+    .hospital-card {
+      background-color: #f0faff;
+      border-left: 5px solid #3399ff;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .hospital-card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .hospital-card p {
+      margin: 0.3rem 0;
+    }
+    button {
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #3399ff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #007acc;
+    }
+    @media (max-width: 600px) {
+      .selectors {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🩺 X-Hospital Finder</h1>
+    <p>Find the best hospitals and clinics in your area</p>
+  </header>
+
+  <div class="container">
+    <div class="selectors">
+      <select id="state">
+        <option disabled selected>Select State</option>
+        <option value="gujarat">Gujarat</option>
+        <option value="maharashtra">Maharashtra</option>
+        <option value="kerala">Kerala</option>
+      </select>
+
+      <select id="city">
+        <option disabled selected>Select City</option>
+        <option value="vadodara">Vadodara</option>
+        <option value="ahmedabad">Ahmedabad</option>
+        <option value="mumbai">Mumbai</option>
+        <option value="pune">Pune</option>
+        <option value="kochi">Kochi</option>
+      </select>
+
+      <select id="area">
+        <option disabled selected>Select Area</option>
+        <option value="alkapuri">Alkapuri</option>
+        <option value="andheri">Andheri</option>
+        <option value="ernakulam">Ernakulam</option>
+      </select>
+
+      <select id="illness">
+        <option disabled selected>Select Illness</option>
+        <option value="cancer">Cancer</option>
+        <option value="heart">Heart</option>
+        <option value="kidney">Kidney</option>
+        <option value="surgical">Surgical</option>
+      </select>
+    </div>
+
+    <div class="results">
+      <h2>🔍 Results will appear here</h2>
+    </div>
+  </div>
+
+  <script>
+    const stateSelect = document.getElementById('state');
+    const citySelect = document.getElementById('city');
+    const areaSelect = document.getElementById('area');
+    const illnessSelect = document.getElementById('illness');
+    const results = document.querySelector('.results');
+
+    function showClinic(data) {
+      results.innerHTML = `<h2>🏥 Clinic Info</h2>`;
+      if (data.error) {
+        results.innerHTML += `<p>${data.error}</p>`;
+      } else {
+        results.innerHTML += `
+          <div class="hospital-card">
+            <h3>${data.name}</h3>
+            <p>👨‍⚕️ ${data.doctor}</p>
+            <p>📍 ${data.address}</p>
+            <p>📞 ${data.contact}</p>
+          </div>
+        `;
+      }
+    }
+
+    function showHospital(data) {
+      results.innerHTML = `<h2>🏥 Recommended Hospital</h2>`;
+      if (data.error) {
+        results.innerHTML += `<p>${data.error}</p>`;
+      } else {
+        results.innerHTML += `
+          <div class="hospital-card">
+            <h3>${data.recommended_hospital}</h3>
+            <p>📍 Based on selected illness</p>
+          </div>
+        `;
+      }
+    }
+
+    areaSelect.addEventListener('change', () => {
+      fetch(`/api/clinic/${areaSelect.value}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ choice: "1" }) // Static for now
+      })
+      .then(res => res.json())
+      .then(showClinic)
+      .catch(() => results.innerHTML = `<p>Error fetching clinic data</p>`);
+    });
+
+    illnessSelect.addEventListener('change', () => {
+      fetch(`/api/illness/${stateSelect.value}/${citySelect.value}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ illness: illnessSelect.value })
+      })
+      .then(res => res.json())
+      .then(showHospital)
+      .catch(() => results.innerHTML = `<p>Error fetching hospital data</p>`);
+    });
+  </script>
+</body>
+</html>
+
