@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>X Hospital — Find Best Hospitals & Clinics</title>
+  <style>
+    :root{
+      --accent:#0ea5a4; /* teal */
+      --accent-dark:#0b7b79;
+      --bg:#f6fbfd;
+      --card:#ffffff;
+      --muted:#64748b;
+      --glass: rgba(255,255,255,0.8);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#0b1320;background:linear-gradient(180deg,#eaf8f7 0%, #f6fbfd 100%)}
+    .wrap{max-width:1100px;margin:30px auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px;box-shadow:0 8px 20px rgba(14,165,164,0.18)}
+    h1{margin:0;font-size:22px}
+    p.lead{margin:6px 0 0;color:var(--muted)}
+
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;margin-top:22px;align-items:start}
+    .hero-card{background:var(--card);border-radius:14px;padding:26px;box-shadow:0 10px 30px rgba(2,6,23,0.06)}
+    .intro{padding:18px 12px}
+    .big-title{font-size:28px;margin:0 0 8px}
+    .sub{color:var(--muted);margin:0 0 18px}
+
+    /* Options column */
+    .options{display:flex;flex-direction:column;gap:14px}
+    .option{border-radius:12px;padding:16px;background:linear-gradient(180deg, rgba(14,165,164,0.06), rgba(11,123,121,0.02));border:1px solid rgba(11,123,121,0.06)}
+    .option h3{margin:0 0 8px}
+    label{display:block;font-size:13px;margin-bottom:6px}
+    select, button.input-btn{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #dbeafe;background:white;font-size:14px}
+    select:focus, button.input-btn:focus{outline:2px solid rgba(14,165,164,0.18)}
+    .row{display:flex;gap:10px}
+    .row .col{flex:1}
+    .search-row{display:flex;gap:10px;margin-top:10px}
+    .search-btn{background:var(--accent);color:white;border:none;padding:12px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+    .clear-btn{background:transparent;border:1px solid rgba(11,123,121,0.12);padding:10px;border-radius:10px;cursor:pointer}
+
+    /* Result area */
+    .result{margin-top:14px;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(3,7,18,0.02),transparent);border:1px dashed rgba(3,7,18,0.04);min-height:44px;display:flex;align-items:center;gap:12px;color:var(--muted)}
+
+    /* Right side info */
+    .right-hero{display:flex;flex-direction:column;gap:12px}
+    .feature{padding:12px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.9),var(--glass));box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+    .badge{display:inline-block;padding:8px 10px;border-radius:10px;background:rgba(14,165,164,0.12);color:var(--accent-dark);font-weight:700}
+
+    footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* responsive */
+    @media(max-width:980px){.hero{grid-template-columns:1fr;padding:0}.right-hero{order:2}.options{order:1}}
+    @media(max-width:520px){.logo{width:48px;height:48px;font-size:18px}.big-title{font-size:20px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">X</div>
+        <div>
+          <h1 style="font-size:16px;margin:0">X HOSPITAL</h1>
+          <p class="lead">Trusted hospitals & clinics across India</p>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:700;color:var(--accent-dark)">Emergency? Call: 1800-XXX-XXXX</div>
+        <div style="color:var(--muted);font-size:13px">24/7 assistance</div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card intro">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div>
+            <h2 class="big-title">Find the best hospital or clinic near you</h2>
+            <p class="sub">Choose an option below — search by state, city and area. Built for demo/presentation — looks great on projector.</p>
+          </div>
+          <div class="badge">Verified</div>
+        </div>
+
+        <div class="options" style="margin-top:16px">
+
+          <!-- OPTION 1: Get Best Illness Hospital -->
+          <div class="option" id="opt-hosp">
+            <h3>Get Best Illness Hospital</h3>
+            <label for="state-hosp">Select state</label>
+            <select id="state-hosp">
+              <option value="">-- Select State --</option>
+              <option value="gujarat">Gujarat</option>
+              <option value="maharashtra">Maharashtra</option>
+              <option value="telangana">Telangana</option>
+              <option value="tamilnadu">Tamil Nadu</option>
+              <option value="madhya_pradesh">Madhya Pradesh</option>
+              <option value="jammu_and_kashmir">Jammu &amp; Kashmir</option>
+              <option value="others">Other</option>
+            </select>
+
+            <div class="row" style="margin-top:10px">
+              <div class="col">
+                <label for="city-hosp">City (auto)</label>
+                <select id="city-hosp" disabled>
+                  <option value="">-- Select City --</option>
+                </select>
+              </div>
+              <div class="col">
+                <label for="area-hosp">Area / Locality</label>
+                <select id="area-hosp" disabled>
+                  <option value="">-- Select Area --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="search-row">
+              <button class="search-btn" id="search-hosp">Search Hospitals</button>
+              <button class="clear-btn" id="clear-hosp">Clear</button>
+            </div>
+
+            <div class="result" id="result-hosp">Choose state → city → area and click <strong>Search Hospitals</strong>.</div>
+          </div>
+
+          <!-- OPTION 2: Find Best Clinic in Your City -->
+          <div class="option" id="opt-clinic">
+            <h3>Find Best Clinic in your city</h3>
+            <label for="state-clinic">Select state</label>
+            <select id="state-clinic">
+              <option value="">-- Select State --</option>
+              <option value="maharashtra">Maharashtra</option>
+              <option value="gujarat">Gujarat</option>
+            </select>
+
+            <div class="row" style="margin-top:10px">
+              <div class="col">
+                <label for="city-clinic">City</label>
+                <select id="city-clinic" disabled>
+                  <option value="">-- Select City --</option>
+                </select>
+              </div>
+              <div class="col">
+                <label for="area-clinic">Area / Locality</label>
+                <select id="area-clinic" disabled>
+                  <option value="">-- Select Area --</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="search-row">
+              <button class="search-btn" id="search-clinic">Search Clinics</button>
+              <button class="clear-btn" id="clear-clinic">Clear</button>
+            </div>
+
+            <div class="result" id="result-clinic">Pick state and city — then search.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <aside class="right-hero">
+        <div class="feature">
+          <h4 style="margin:0 0 6px">Presentation mode</h4>
+          <div style="color:var(--muted);font-size:14px">This clean layout is perfect for showing your sir — change colors or logos easily. All interactions are client-side (no backend needed for demo).</div>
+        </div>
+        <div class="feature">
+          <h4 style="margin:0 0 6px">How it works</h4>
+          <ol style="margin:0 0 0 18px;color:var(--muted)">
+            <li>Select option (Hospital / Clinic)</li>
+            <li>Choose state → city → area</li>
+            <li>Click <strong>Search</strong> to show results (demo alert)</li>
+          </ol>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <div>Made for demo — X Hospital presentation · Need PDF or slide version? I can export.</div>
+    </footer>
+  </div>
+
+  <script>
+    // Data structure for states -> cities -> areas as requested
+    const data = {
+      maharashtra: {
+        mumbai: ['Bandra','Andheri','Dadar'],
+        pune: ['Kothrud','Sivajinagar','Hadaspar'],
+        nagpur: ['Civil Line','Sitabuldi','Dharampeth']
+      },
+      gujarat: {
+        vadodara: ['Alkapuri','Gotri','Manjalpur'],
+        ahmedabad: ['Navrangpura','Paldi','Vastrapur'],
+        surat: ['Adajan','Udhna','Varchana']
+      },
+      telangana: {},
+      tamilnadu: {},
+      madhya_pradesh: {},
+      jammu_and_kashmir: {},
+      gujarat_full: {},
+      others: {}
+    };
+
+    // Utility to populate select
+    function fillSelect(selectEl, items, placeholder) {
+      selectEl.innerHTML = '';
+      const opt0 = document.createElement('option');
+      opt0.value = '';
+      opt0.textContent = placeholder || '-- Select --';
+      selectEl.appendChild(opt0);
+      for (const key of Object.keys(items)) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = capitalize(key.replace(/_/g,' '));
+        selectEl.appendChild(opt);
+      }
+    }
+    function fillArraySelect(selectEl, arr, placeholder) {
+      selectEl.innerHTML = '';
+      const opt0 = document.createElement('option'); opt0.value=''; opt0.textContent = placeholder||'-- Select --'; selectEl.appendChild(opt0);
+      arr.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;selectEl.appendChild(o);});
+    }
+    function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+
+    // Elements
+    const stateHosp = document.getElementById('state-hosp');
+    const cityHosp = document.getElementById('city-hosp');
+    const areaHosp = document.getElementById('area-hosp');
+    const searchHosp = document.getElementById('search-hosp');
+    const resultHosp = document.getElementById('result-hosp');
+    const clearHosp = document.getElementById('clear-hosp');
+
+    const stateClinic = document.getElementById('state-clinic');
+    const cityClinic = document.getElementById('city-clinic');
+    const areaClinic = document.getElementById('area-clinic');
+    const searchClinic = document.getElementById('search-clinic');
+    const resultClinic = document.getElementById('result-clinic');
+    const clearClinic = document.getElementById('clear-clinic');
+
+    // Populate state selects for hospital (7 states) - already in HTML but we want consistent keys
+    // For clinic (two states) already in HTML.
+
+    // When hospital state changes
+    stateHosp.addEventListener('change',()=>{
+      const s = stateHosp.value;
+      if(!s){ cityHosp.innerHTML='<option value="">-- Select City --</option>'; cityHosp.disabled=true; areaHosp.disabled=true; areaHosp.innerHTML='<option value="">-- Select Area --</option>'; return; }
+      if(s==='maharashtra' || s==='gujarat'){
+        const cities = data[s];
+        fillSelect(cityHosp, cities, '-- Select City --');
+        cityHosp.disabled=false; areaHosp.disabled=true; areaHosp.innerHTML='<option value="">-- Select Area --</option>';
+      } else {
+        // no city data for other states in demo
+        cityHosp.innerHTML='<option value="">Not available in demo</option>';
+        cityHosp.disabled=true; areaHosp.disabled=true; areaHosp.innerHTML='<option value="">--</option>';
+      }
+    });
+
+    cityHosp.addEventListener('change',()=>{
+      const s = stateHosp.value; const c = cityHosp.value;
+      if(!c){ areaHosp.disabled=true; areaHosp.innerHTML='<option value="">-- Select Area --</option>'; return; }
+      const areas = data[s][c] || [];
+      fillArraySelect(areaHosp, areas, '-- Select Area --'); areaHosp.disabled=false;
+    });
+
+    searchHosp.addEventListener('click',()=>{
+      const s = stateHosp.value; const c = cityHosp.value; const a = areaHosp.value;
+      if(!s){ alert('Please select a state first.'); return; }
+      let txt = `Results (demo): State: ${capitalize(s.replace(/_/g,' '))}`;
+      if(c) txt += ` • City: ${capitalize(c)}`;
+      if(a) txt += ` • Area: ${a}`;
+      resultHosp.textContent = txt;
+      // For presentation, also show a modal-like highlight (simple)
+      resultHosp.style.border='1px solid rgba(14,165,164,0.18)';
+    });
+
+    clearHosp.addEventListener('click',()=>{
+      stateHosp.value=''; cityHosp.innerHTML='<option value="">-- Select City --</option>'; cityHosp.disabled=true; areaHosp.innerHTML='<option value="">-- Select Area --</option>'; areaHosp.disabled=true; resultHosp.textContent='Choose state → city → area and click Search Hospitals.'; resultHosp.style.border='1px dashed rgba(3,7,18,0.04)';
+    });
+
+    // Clinic flows (only Maharashtra & Gujarat)
+    stateClinic.addEventListener('change',()=>{
+      const s = stateClinic.value;
+      if(!s){ cityClinic.innerHTML='<option value="">-- Select City --</option>'; cityClinic.disabled=true; areaClinic.disabled=true; areaClinic.innerHTML='<option value="">-- Select Area --</option>'; return; }
+      const cities = data[s];
+      fillSelect(cityClinic, cities, '-- Select City --'); cityClinic.disabled=false; areaClinic.disabled=true; areaClinic.innerHTML='<option value="">-- Select Area --</option>';
+    });
+    cityClinic.addEventListener('change',()=>{
+      const s = stateClinic.value; const c = cityClinic.value;
+      if(!c){ areaClinic.disabled=true; areaClinic.innerHTML='<option value="">-- Select Area --</option>'; return; }
+      const areas = data[s][c] || [];
+      fillArraySelect(areaClinic, areas, '-- Select Area --'); areaClinic.disabled=false;
+    });
+    searchClinic.addEventListener('click',()=>{
+      const s = stateClinic.value; const c = cityClinic.value; const a = areaClinic.value;
+      if(!s){ alert('Please choose a state first.'); return; }
+      let txt = `Clinic results (demo): State: ${capitalize(s)}`;
+      if(c) txt += ` • City: ${capitalize(c)}`;
+      if(a) txt += ` • Area: ${a}`;
+      resultClinic.textContent = txt; resultClinic.style.border='1px solid rgba(14,165,164,0.18)';
+    });
+    clearClinic.addEventListener('click',()=>{
+      stateClinic.value=''; cityClinic.innerHTML='<option value="">-- Select City --</option>'; cityClinic.disabled=true; areaClinic.innerHTML='<option value="">-- Select Area --</option>'; areaClinic.disabled=true; resultClinic.textContent='Pick state and city — then search.'; resultClinic.style.border='1px dashed rgba(3,7,18,0.04)';
+    });
+
+    // Initialize city selects disabled
+    cityHosp.disabled=true; areaHosp.disabled=true; cityClinic.disabled=true; areaClinic.disabled=true;
+
+    // Pre-fill hospital states' city lists for the two known states so HTML select keys match data keys
+    // For demo we want the option values to match data keys (mumbai,pune,nagpur etc.). We'll patch options when state selected.
+
+    // Small helper to set city select options from object keys
+    function setCityOptions(selectEl, obj){
+      selectEl.innerHTML='';
+      const defaultOpt = document.createElement('option'); defaultOpt.value=''; defaultOpt.textContent='-- Select City --'; selectEl.appendChild(defaultOpt);
+      Object.keys(obj).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=capitalize(k);selectEl.appendChild(o)});
+    }
+
+    // Make sure the state-hosp select option values map to our data keys
+    // (HTML already uses 'maharashtra' and 'gujarat') — nothing to do.
+
+    // For presentation: highlight the two clinic states visually when page loads
+    window.addEventListener('load',()=>{
+      // animate little badge
+      const badge = document.querySelector('.badge');
+      badge.style.transform='translateY(-2px)';
+    });
+
+  </script>
+</body>
+</html>
